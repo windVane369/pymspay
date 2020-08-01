@@ -9,6 +9,8 @@ __pycache__/
 .svn/
 test.py
 test.json
+files/
+local_settings.py
 
 # Distribution / packaging
 .Python
