@@ -2,13 +2,12 @@
 from pymspay.api.api import MSYHPay
 from pymspay.base import BaseClient
 
-pay = MSYHPay(client=BaseClient())
+pay = MSYHPay(client=BaseClient(cid='30510001520K224'))
 
 
 def download_file():
     df = pay.download_file(
         fn='GW05',
-        cid='30510001520K224',
         source='01',
         account_date='2019-06-04-00:00:00',
         start_time='2019-06-13 00:00:00',
@@ -20,7 +19,6 @@ def download_file():
 def query_payment_status():
     qps = pay.query_payment_status(
         fn='GW02',
-        cid='30510001520K224',
         source='01',
         order_num='46313123245612333'
     )
@@ -30,7 +28,6 @@ def query_payment_status():
 def per_paid_order():
     ppo = pay.per_paid_order(
         fn='GW10',
-        cid='30510001520K224',
         source='02',
         back_url='https://test-p.pxjy.com/api/pay/test',
         order_num='46313123245610933',

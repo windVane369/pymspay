@@ -2,6 +2,7 @@
 
 from ctypes import *  # NOQA
 
+from pymspay.core.exceptions import InvalidVerifyException
 from pymspay.core.utils import Single, json_2_str
 
 
@@ -25,7 +26,7 @@ class SignatureCertification(metaclass=Single):
         result = self.cmbc.SignAndEncrypt(
             self.g_key_handle, source_data, source_data_size, byref(base64_envelope_ptr))  # NOQA
         if result != 0:
-            return ValueError('Sign And Encrypt Failed')
+            return InvalidVerifyException(errmsg='Sign And Encrypt Failed')
 
         out_str = cast(base64_envelope_ptr, c_char_p).value  # NOQA
         self.cmbc.FreeMemory(base64_envelope_ptr)
@@ -43,7 +44,7 @@ class SignatureCertification(metaclass=Single):
         result = self.cmbc.DecryptAndVerify(
             self.g_key_handle, base64_envelope_encrypted_ptr, byref(plain_data_ptr), byref(plain_data_size))  # NOQA
         if result != 0:
-            return ValueError('Decrypt And Verify Failed')
+            return InvalidVerifyException(errmsg='Decrypt And Verify Failed')
 
         out_str = cast(plain_data_ptr, c_char_p).value  # NOQA
         self.cmbc.FreeMemory(plain_data_ptr)

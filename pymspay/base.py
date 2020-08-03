@@ -5,6 +5,8 @@ import logging
 import requests
 
 from six.moves.urllib.parse import urljoin, urlencode
+
+from pymspay.core.exceptions import PayException
 from .api.base import MSYHPayBaseAPI
 from pymspay import settings as ps
 
@@ -30,8 +32,9 @@ class BaseClient(object):
             setattr(mcs, name, api)
         return mcs
 
-    def __init__(self, timeout=None):
+    def __init__(self, cid=None, timeout=None):
         self.timeout = timeout
+        self.cid = cid
 
     def get(self, uri, params=None, **kwargs):
         """
@@ -93,7 +96,7 @@ class BaseClient(object):
         except requests.RequestException as exc:
             logger.error("\n【请求地址】: %s\n【请求参数】：%s \n%s\n【异常信息】：%s",
                          url, kwargs.get('params', ''), kwargs.get('data', ''), exc)
-            raise Exception(exc)
+            raise PayException(errmsg=exc)
 
         result = res.text
 
