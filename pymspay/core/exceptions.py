@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pymspay.core.utils import to_text
+from pymspay.core.str_utils import to_text
 
 
 class PyMsPay(Exception):
