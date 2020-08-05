@@ -51,7 +51,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='pyallinpay',
-    version='0.0.3',
+    version='0.0.4',
     keywords='pymspay, SDK, 民生银行信用卡支付',
     description='pymspay SDK for Python',
     long_description=long_description,
