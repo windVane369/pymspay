@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from pymspay.core.signature import SignatureCertification
 from pymspay.core.utils import is_html
 
 
 class MSYHPayBaseAPI(object):
 
-    def __init__(self, client=None):
+    def __init__(self, client=None, context=None):
         self._client = client
-        self.sign_func = SignatureCertification()
+        self.context = context
 
     def _get(self, url, params=None, **kwargs):
         return self._client.get(url, params, **kwargs)
@@ -20,7 +19,7 @@ class MSYHPayBaseAPI(object):
         return response_data
 
     def _sign_and_encrypt(self, data):
-        crypt_data = self.sign_func.sign_and_encrypt(data)
+        crypt_data = self.context.sign_and_encrypt(data)
         return {
             '_cryptDatas': crypt_data,
             '_merNum': data.get('cid')
@@ -30,7 +29,7 @@ class MSYHPayBaseAPI(object):
         # 检查数据需要解密
         if is_html(data):
             return data
-        return self.sign_func.decrypt_and_verify(data)
+        return self.context.decrypt_and_verify(data)
 
     @property
     def cid(self):

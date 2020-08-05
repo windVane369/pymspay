@@ -8,7 +8,6 @@ from six.moves.urllib.parse import urljoin, urlencode
 
 from pymspay.core.exceptions import PayException
 from .api.base import MSYHPayBaseAPI
-from pymspay import settings as ps
 
 logger = logging.getLogger(__name__)
 
@@ -17,13 +16,11 @@ def _is_api_endpoint(obj):
     return isinstance(obj, MSYHPayBaseAPI)
 
 
-class BaseClient(object):
+class Client(object):
     _http = requests.Session()
 
-    API_BASE_URL = ps.MSYH_BASE_URL
-
     def __new__(cls, *args, **kwargs):
-        mcs = super(BaseClient, cls).__new__(cls, *args, **kwargs)
+        mcs = super(Client, cls).__new__(cls, *args, **kwargs)
 
         api_endpoints = inspect.getmembers(mcs, _is_api_endpoint)
         for name, api in api_endpoints:
@@ -32,9 +29,17 @@ class BaseClient(object):
             setattr(mcs, name, api)
         return mcs
 
-    def __init__(self, cid=None, timeout=None):
+    def __init__(self, *, cid, api_base_url, headers, timeout=None):
+        """
+        :param cid: 商家编号，必传项
+        :param api_base_url: 请求域名地址，必传项
+        :param headers: 请求头信息，必传项
+        :param timeout: 超时时间，非必传
+        """
         self.timeout = timeout
         self.cid = cid
+        self.api_base_url = api_base_url
+        self.headers = headers
 
     def get(self, uri, params=None, **kwargs):
         """
@@ -69,13 +74,13 @@ class BaseClient(object):
 
     def _request(self, method, uri_or_endpoint, **kwargs):
         if not uri_or_endpoint.startswith(('http://', 'https://')):
-            api_base_url = kwargs.pop('api_base_url', self.API_BASE_URL)
+            api_base_url = kwargs.pop('api_base_url', self.api_base_url)
             url = urljoin(api_base_url, uri_or_endpoint)
         else:
             url = uri_or_endpoint
 
         if 'headers' not in kwargs:
-            kwargs['headers'] = ps.MSYH_HEADERS
+            kwargs['headers'] = self.headers
 
         if 'params' not in kwargs:
             kwargs['params'] = {}

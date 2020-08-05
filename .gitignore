@@ -11,6 +11,7 @@ test.py
 test.json
 files/
 local_settings.py
+.DS_Store
 
 # Distribution / packaging
 .Python

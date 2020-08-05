@@ -1,8 +1,31 @@
 # -*- coding: utf-8 -*-
 from pymspay.api.api import MSYHPay
-from pymspay.base import BaseClient
+from pymspay.client import Client
+from pymspay.core.signature import SignatureCertification
 
-pay = MSYHPay(client=BaseClient(cid='30510001520K224'))
+
+class Context(SignatureCertification):
+    # 商家编号加密私钥
+    MSYH_PRIVATE_FILE = '123123'
+    # 商家密码
+    MSYH_PRIVATE_FILE_PASSWORD = 'cmbc123'
+    # 银行公钥
+    MSYH_CERT_FILE = 'sdfsafd'
+    # 加密解密的第三方包
+    # # Linux so文件
+    # # Windows dll文件
+    MSYH_PACKAGE = 'sdfsdf.so'
+
+
+context = Context()
+pay = MSYHPay(
+    client=Client(
+        cid='30510001520K224',
+        api_base_url='http://www/baidu.com',
+        headers={'origin': 'http://www.baidu.com'}
+    ),
+    context=context
+)
 
 
 def download_file():
