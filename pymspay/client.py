@@ -20,7 +20,7 @@ class Client(object):
     _http = requests.Session()
 
     def __new__(cls, *args, **kwargs):
-        mcs = super(Client, cls).__new__(cls, *args, **kwargs)
+        mcs = super(Client, cls).__new__(cls)
 
         api_endpoints = inspect.getmembers(mcs, _is_api_endpoint)
         for name, api in api_endpoints:
